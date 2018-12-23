@@ -1,0 +1,14 @@
+uuid: 61a5077b-6cdb-4208-ae49-16f03c6b42c7
+name: Pavement
+mail: Admin@Pavement.Rutgers.edu
+slogan: ''
+page:
+  403: ''
+  404: ''
+  front: /node
+admin_compact_mode: false
+weight_select_max: 100
+langcode: en
+default_langcode: en
+_core:
+  default_config_hash: yXadRE77Va-G6dxhd2kPYapAvbnSvTF6hO4oXiOEynI
