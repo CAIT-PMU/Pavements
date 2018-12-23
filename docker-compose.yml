@@ -4,6 +4,7 @@ services:
     image: mariadb:10.2
     environment:
       MYSQL_DATABASE: drupal
+      MYSQL_USER: drupal
       MYSQL_ROOT_PASSWORD: PavementSucks
     volumes:
       - db_data:/var/lib/mysql
