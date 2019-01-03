@@ -1,0 +1,41 @@
+version: '3'
+services:
+  db:
+    image: jhenck57/arc_gis:mariadb
+    volumes:
+      - db_data:/var/lib/mysql
+    restart: always
+
+  drupal:
+    depends_on:
+      - db
+    image: jhenck57/arc_gis:drupal
+    ports:
+      - "7200:80"
+    volumes:
+      - ./app:/app
+    restart: always
+
+  jupyter:
+    image: jhenck57/arc_gis:jupyter_gis
+    deploy:
+      replicas: 1
+      resources:
+        limits:
+          cpus: "0.5"
+          memory: 9200M
+      restart_policy:
+        condition: on-failure
+    ports:
+      - "8888:8888"
+      - "8889:8889"
+    networks:
+      - webnet
+  
+networks:
+  webnet:
+     
+volumes:
+  db_data:
+  app:
+  
