@@ -1,5 +1,70 @@
 version: '3'
 services:
+  server:
+    container_name: server
+    image: jhenck57/arc_gis:arcserver
+    ports:
+      - "6080:6080"
+      - "6443:6443"
+    volumes:
+      - "/srv/arcgis/config-store:/home/arcgis/server/usr/config-store"
+      - "/srv/arcgis/directories:/home/arcgis/server/usr/directories"
+      - "/srv/arcgis/logs:/home/arcgis/server/usr/logs"
+    restart: always
+    env_file:
+      - ./Envs/server.env
+    networks:
+      arcgis.net:
+
+  portal:
+    container_name: portal
+    image: jhenck57/arc_gis:arcportal
+    ports:
+      - "7080:7080"
+      - "7443:7443"
+    volumes:
+      - /srv/arcgis/arcgisportal:/home/arcgis/portal/usr/arcgisportal
+    depends_on:
+      - server
+    restart: on-failure
+    env_file:
+      - ./Envs/portal.env
+    networks:
+      arcgis.net:
+
+    
+  web-adaptor:
+    container_name: web-adaptor
+    image: jhenck57/arc_gis:arcweb
+    ports:
+      - "80:80"
+      - "443:443"
+    links:
+      - "portal"
+      - "server"
+      - "datastore"
+    depends_on:
+      - server
+    restart: on-failure
+    env_file:
+      - ./Envs/webadapt.env
+    networks:
+      arcgis.net:
+
+
+  datastore:
+    container_name: datastore
+    image: jhenck57/arc_gis:arcdatastore
+    ports:
+      - "2443:2443"
+    depends_on:
+      - server
+    restart: on-failure
+    env_file:
+      - ./Envs/datastore.env
+    networks:
+      arcgis.net:
+
   db:
     image: jhenck57/arc_gis:mariadb
     volumes:
@@ -34,7 +99,9 @@ services:
   
 networks:
   webnet:
-     
+  arcgis.net:
+    driver: bridge   
+
 volumes:
   db_data:
   app:
