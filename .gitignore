@@ -1,5 +1,5 @@
 # Ignore file named 'ignoreme.txt'
-pw
+/pw
 ignoreme.txt
 docker-compose 5_fail.yaml
 Envs/
