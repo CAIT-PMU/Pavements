@@ -1,0 +1,25 @@
+version: '3'
+services:
+  drupal_db:
+    image: jhenck57/arc_gis:mariadb
+    environment:
+      MYSQL_DATABASE: drupal
+      MYSQL_USER: drupal
+      MYSQL_ROOT_PASSWORD: PavementSucks
+    volumes:
+      - db_data:/var/lib/mysql
+    restart: always
+
+  drupal:
+    depends_on:
+      - drupal_db
+    image: jhenck57/arc_gis:drupal
+    ports:
+      - "7200:80"
+    volumes:
+      - ./app:/app
+    restart: always
+
+volumes:
+  db_data:
+  app:
